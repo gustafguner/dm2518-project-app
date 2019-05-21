@@ -3,7 +3,11 @@ import gql from 'graphql-tag';
 import { View, Text, Button } from 'react-native';
 import { Query } from 'react-apollo';
 
-import { generateKeyPair, KeyPair } from '../../crypto';
+import {
+  generateKeyPair,
+  encryptWithPublicKey,
+  decryptWithPrivateKey,
+} from '../../crypto';
 
 const QUERY = gql`
   query User {
@@ -18,7 +22,27 @@ interface Props {
   navigation: any;
 }
 
+const test = async () => {
+  const keyPair = await generateKeyPair();
+  console.log(keyPair);
+
+  if (keyPair !== false) {
+    const message = 'Lorem ipsum';
+    const encryptedMessage = await encryptWithPublicKey(
+      message,
+      keyPair.publicKey,
+    );
+
+    const decryptedMessage = await decryptWithPrivateKey(
+      encryptedMessage,
+      keyPair.privateKey,
+    );
+    console.log(decryptedMessage);
+  }
+};
+
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  test();
   return (
     <View>
       <Text>Home</Text>
@@ -28,17 +52,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         }}
         title="Go to Profile"
       />
-
-      <Query query={QUERY}>
-        {({ data, error, loading }) => {
-          console.log(data);
-          return !loading && !error && data ? (
-            <Text>{data.user.username}</Text>
-          ) : (
-            <Text>Loading...</Text>
-          );
-        }}
-      </Query>
     </View>
   );
 };

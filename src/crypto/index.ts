@@ -1,46 +1,39 @@
-import crypto from 'crypto';
+import { RSA } from 'react-native-rsa-native';
+import to from 'await-to-js';
 
 export interface KeyPair {
   publicKey: string;
   privateKey: string;
 }
 
-const generateKeyPair = () => {
-  return new Promise<KeyPair>((resolve, reject) => {
-    crypto.generateKeyPair(
-      'rsa',
-      {
-        modulusLength: 4096,
-        publicKeyEncoding: {
-          type: 'spki',
-          format: 'pem',
-        },
-        privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem',
-        },
-      },
-      (err, publicKey, privateKey) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ publicKey, privateKey });
-        }
-      },
-    );
-  });
+const generateKeyPair = async () => {
+  const [err, keys] = await to(RSA.generateKeys(4096));
+
+  if (err || !keys) {
+    return false;
+  }
+
+  return { publicKey: keys.public, privateKey: keys.private };
 };
 
-const encryptWithPublicKey = (toEncrypt: string, publicKey: any) => {
-  const buffer = Buffer.from(toEncrypt);
-  const encrypted = crypto.publicEncrypt(publicKey, buffer);
-  return encrypted.toString('base64');
+const encryptWithPublicKey = async (payload: string, publicKey: any) => {
+  const [err, data] = await to(RSA.encrypt(payload, publicKey));
+
+  if (err || !data) {
+    return false;
+  }
+
+  return data;
 };
 
-const decryptWithPrivateKey = (toDecrypt: any, privateKey: any) => {
-  const buffer = Buffer.from(toDecrypt, 'base64');
-  const decrypted = crypto.privateDecrypt(privateKey, buffer);
-  return decrypted.toString('utf8');
+const decryptWithPrivateKey = async (payload: any, privateKey: any) => {
+  const [err, data] = await to(RSA.decrypt(payload, privateKey));
+
+  if (err || !data) {
+    return false;
+  }
+
+  return data;
 };
 
 export { encryptWithPublicKey, decryptWithPrivateKey, generateKeyPair };
