@@ -1,21 +1,24 @@
-import { createStackNavigator } from 'react-navigation';
-import { createAppContainer } from 'react-navigation';
+import * as React from 'react';
+import apolloClient from './src/graphql/client';
+import { ApolloProvider } from 'react-apollo';
 
-import HomeScreen from './src/screens/home';
-import ProfileScreen from './src/screens/profile';
+import Navigation from './src/navigation';
 
-const AppNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-    },
-    Profile: {
-      screen: ProfileScreen,
-    },
-  },
-  {
-    initialRouteName: 'Home',
-  },
+const App = () => (
+  <ApolloProvider client={apolloClient}>
+    <Navigation />
+  </ApolloProvider>
 );
 
-export default createAppContainer(AppNavigator);
+export default App;
+
+// export default createAppContainer(AppNavigator);
+/*
+const App = () => (
+  <ApolloProvider client={apolloClient}>
+    {createAppContainer(AppNavigator)}
+  </ApolloProvider>
+);
+
+export default App;
+*/
