@@ -24,7 +24,6 @@ interface Props {
 
 const test = async () => {
   const keyPair = await generateKeyPair();
-  console.log(keyPair);
 
   if (keyPair !== false) {
     const message = 'Lorem ipsum';
