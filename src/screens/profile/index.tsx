@@ -6,12 +6,15 @@ import {
   NavigationScreenComponent,
 } from 'react-navigation';
 import colors from '../../styles/colors';
+import { getPrivateKey } from '../../auth/auth';
 
-const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => (
-  <View>
-    <Text>Profile</Text>
-  </View>
-);
+const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
+  return (
+    <View>
+      <Text>Profile</Text>
+    </View>
+  );
+};
 
 ProfileScreen.navigationOptions = {
   title: 'Profile',
