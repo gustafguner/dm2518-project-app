@@ -16,6 +16,8 @@ target 'app' do
     :inhibit_warnings => true
 
     
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name == "React"
