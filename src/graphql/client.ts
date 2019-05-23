@@ -6,6 +6,7 @@ import { onError } from 'apollo-link-error';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
+import { getToken } from '../auth/auth';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -14,7 +15,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createHttpLink({
-  uri: 'https://24e6f2de.ngrok.io/graphql',
+  uri: 'http://localhost:4000/graphql',
 });
 
 const wsLink = new WebSocketLink({
@@ -23,6 +24,16 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     timeout: 30000,
   },
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await getToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
 });
 
 const link = split(
@@ -35,7 +46,7 @@ const link = split(
 );
 
 const apolloClient = new ApolloClient({
-  link: errorLink.concat(link),
+  link: errorLink.concat(authLink.concat(link)),
   cache: new InMemoryCache(),
 });
 

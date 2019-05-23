@@ -61,9 +61,6 @@ const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
 HomeScreen.navigationOptions = {
   title: 'Home',
-  headerStyle: {
-    backgroundColor: colors.HEADER,
-  },
 };
 
 export default HomeScreen;
