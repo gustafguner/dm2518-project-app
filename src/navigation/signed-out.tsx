@@ -1,10 +1,17 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
+import WelcomeScreen from '../screens/welcome';
+import LoginScreen from '../screens/login';
+import SignupScreen from '../screens/signup';
 
-const SignedOut: React.FC<{}> = () => (
-  <View>
-    <Text>Signed out</Text>
-  </View>
+const SignedOut = createStackNavigator(
+  {
+    Welcome: WelcomeScreen,
+    Login: LoginScreen,
+    Signup: SignupScreen,
+  },
+  {
+    initialRouteName: 'Welcome',
+  },
 );
 
 export default SignedOut;

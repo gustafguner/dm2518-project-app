@@ -18,7 +18,6 @@ ProfileScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: colors.HEADER,
   },
-  headerTintColor: '#fff',
 };
 
 export default ProfileScreen;

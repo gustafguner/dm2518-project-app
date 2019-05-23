@@ -16,14 +16,18 @@ const removeToken = async () => {
   return !err;
 };
 
-const isSignedIn = async () => {
-  const [err, token] = await to(AsyncStorage.getItem('token'));
-
-  if (err || !token) {
-    return false;
-  }
-
-  return true;
+const isSignedIn = () => {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem('token')
+      .then((res) => {
+        if (res !== null) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .catch((err) => reject(err));
+  });
 };
 
 export { setToken, getToken, removeToken, isSignedIn };

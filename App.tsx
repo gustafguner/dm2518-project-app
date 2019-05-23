@@ -3,16 +3,19 @@ import apolloClient from './src/graphql/client';
 import { ApolloProvider } from 'react-apollo';
 
 import { createRootNavigator } from './src/navigation';
-import { getToken, setToken, removeToken, isSignedIn } from './src/auth/auth';
-
-const testStorage = async () => {
-  const token = await getToken();
-  console.log(token);
-};
+import * as auth from './src/auth/auth';
 
 const App = () => {
-  testStorage();
-  const Navigator = createRootNavigator(true);
+  const [signedIn, setSignedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    auth.isSignedIn().then((res: any) => {
+      setSignedIn(res);
+    });
+  }, []);
+
+  const Navigator = createRootNavigator(signedIn);
+
   return (
     <ApolloProvider client={apolloClient}>
       <Navigator />
