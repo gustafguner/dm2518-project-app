@@ -2,23 +2,15 @@ import * as React from 'react';
 import apolloClient from './src/graphql/client';
 import { ApolloProvider } from 'react-apollo';
 
-import Navigation from './src/navigation';
+import { createRootNavigator } from './src/navigation';
 
-const App = () => (
-  <ApolloProvider client={apolloClient}>
-    <Navigation />
-  </ApolloProvider>
-);
-
-export default App;
-
-// export default createAppContainer(AppNavigator);
-/*
-const App = () => (
-  <ApolloProvider client={apolloClient}>
-    {createAppContainer(AppNavigator)}
-  </ApolloProvider>
-);
+const App = () => {
+  const Navigator = createRootNavigator(true);
+  return (
+    <ApolloProvider client={apolloClient}>
+      <Navigator />
+    </ApolloProvider>
+  );
+};
 
 export default App;
-*/

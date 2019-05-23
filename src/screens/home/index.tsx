@@ -4,10 +4,16 @@ import { View, Text, Button } from 'react-native';
 import { Query } from 'react-apollo';
 
 import {
+  NavigationScreenProps,
+  NavigationScreenComponent,
+} from 'react-navigation';
+
+import {
   generateKeyPair,
   encryptWithPublicKey,
   decryptWithPrivateKey,
 } from '../../crypto';
+import colors from '../../styles/colors';
 
 const QUERY = gql`
   query User {
@@ -17,10 +23,6 @@ const QUERY = gql`
     }
   }
 `;
-
-interface Props {
-  navigation: any;
-}
 
 const test = async () => {
   const keyPair = await generateKeyPair();
@@ -40,7 +42,9 @@ const test = async () => {
   }
 };
 
-const HomeScreen: React.FC<Props> = ({ navigation }) => {
+const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
+  navigation,
+}) => {
   test();
   return (
     <View>
@@ -53,6 +57,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       />
     </View>
   );
+};
+
+HomeScreen.navigationOptions = {
+  title: 'Home',
+  headerStyle: {
+    backgroundColor: colors.HEADER,
+  },
+  headerTintColor: '#fff',
 };
 
 export default HomeScreen;
