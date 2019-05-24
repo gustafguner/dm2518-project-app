@@ -67,6 +67,7 @@ buck-out/
 .env
 
 ios/Pods
+ios/Pods/*
 xcuserdata/
 
 .gradle
