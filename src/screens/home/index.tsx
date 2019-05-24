@@ -2,7 +2,7 @@ import * as React from 'react';
 import gql from 'graphql-tag';
 import { View, Text, Button } from 'react-native';
 import { Query } from 'react-apollo';
-
+import { Container } from '../../components/Container';
 import {
   NavigationScreenProps,
   NavigationScreenComponent,
@@ -48,15 +48,9 @@ const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 }) => {
   test();
   return (
-    <View>
+    <Container>
       <Text>Home</Text>
-      <Button
-        onPress={() => {
-          navigation.navigate('Profile');
-        }}
-        title="Go to Profile"
-      />
-    </View>
+    </Container>
   );
 };
 

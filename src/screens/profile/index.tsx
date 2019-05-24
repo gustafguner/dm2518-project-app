@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-
+import { Container } from '../../components/Container';
 import {
   NavigationScreenProps,
   NavigationScreenComponent,
@@ -35,7 +35,7 @@ interface Variables {
 
 const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
   return (
-    <View>
+    <Container>
       <Query<Response, Variables> query={PROFILE_QUERY}>
         {({ data, loading, error }) =>
           data && !loading && !error ? (
@@ -45,7 +45,7 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
           )
         }
       </Query>
-    </View>
+    </Container>
   );
 };
 
