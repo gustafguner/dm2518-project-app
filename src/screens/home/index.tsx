@@ -62,9 +62,18 @@ const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
 HomeScreen.navigationOptions = {
   title: 'Home',
+  headerStyle: {
+    height: 90,
+    paddingBottom: 16,
+    paddingTop: 16,
+  },
   headerTitleStyle: {
+    fontSize: 30,
     fontFamily: fonts.CIRCULAR_BOOK,
-    fontWeight: 'normal',
+    fontWeight: 'bold',
+    flex: 1,
+    alignSelf: 'flex-end',
+    textAlign: 'left',
   },
 };
 

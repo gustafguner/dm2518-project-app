@@ -9,7 +9,7 @@ import ProfileScreen from '../screens/profile';
 import styled from 'styled-components';
 import { View } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
-import { fonts } from '../styles';
+import { fonts, colors } from '../styles';
 
 interface IconProps {
   routeName: string;
@@ -18,10 +18,10 @@ interface IconProps {
 
 const TabBarIcon: React.FC<IconProps> = ({ routeName, focused }) => (
   <Svg
-    width="22"
-    height="22"
+    width="20"
+    height="20"
     viewBox="0 0 482.9 482.9"
-    fill={focused ? '#000' : '#606060'}
+    fill={focused ? colors.PRIMARY : '#606060'}
   >
     {routeName === 'Profile' ? (
       <>
@@ -85,10 +85,11 @@ const SignedIn = createBottomTabNavigator(
       },
     }),
     tabBarOptions: {
-      activeTintColor: 'black',
+      activeTintColor: colors.PRIMARY,
       inactiveTintColor: 'gray',
       labelStyle: {
         fontFamily: fonts.CIRCULAR_BOOK,
+        fontSize: 11,
       },
     },
   },
