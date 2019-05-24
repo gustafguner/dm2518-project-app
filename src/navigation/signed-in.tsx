@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/profile';
 import styled from 'styled-components';
 import { View } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { fonts } from '../styles';
 
 interface IconProps {
   routeName: string;
@@ -86,6 +87,9 @@ const SignedIn = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: 'black',
       inactiveTintColor: 'gray',
+      labelStyle: {
+        fontFamily: fonts.CIRCULAR_BOOK,
+      },
     },
   },
 );

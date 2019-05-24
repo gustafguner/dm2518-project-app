@@ -9,6 +9,7 @@ import colors from '../../styles/colors';
 import { getPrivateKey } from '../../auth/auth';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { fonts } from '../../styles';
 
 const PROFILE_QUERY = gql`
   query User($username: String) {
@@ -50,6 +51,10 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
 
 ProfileScreen.navigationOptions = {
   title: 'Profile',
+  headerTitleStyle: {
+    fontFamily: fonts.CIRCULAR_BOOK,
+    fontWeight: 'normal',
+  },
 };
 
 export default ProfileScreen;

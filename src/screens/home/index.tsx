@@ -14,6 +14,7 @@ import {
   decryptWithPrivateKey,
 } from '../../crypto';
 import colors from '../../styles/colors';
+import { fonts } from '../../styles';
 
 const QUERY = gql`
   query User {
@@ -61,6 +62,10 @@ const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
 HomeScreen.navigationOptions = {
   title: 'Home',
+  headerTitleStyle: {
+    fontFamily: fonts.CIRCULAR_BOOK,
+    fontWeight: 'normal',
+  },
 };
 
 export default HomeScreen;
