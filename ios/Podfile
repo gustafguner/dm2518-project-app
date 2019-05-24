@@ -9,6 +9,7 @@ target 'app' do
 
   pod 'React', :path => '../node_modules/react-native', :subspecs => [
     'RCTLinkingIOS',
+    'RCTImage'
   ]
 
   pod 'yoga',
@@ -17,6 +18,8 @@ target 'app' do
 
     
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
   post_install do |installer|
     installer.pods_project.targets.each do |target|

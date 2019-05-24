@@ -27,6 +27,7 @@
     "react-native": "0.59.8",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-rsa-native": "^1.0.24",
+    "react-native-svg": "^9.4.0",
     "react-navigation": "^3.11.0",
     "styled-components": "^4.2.0",
     "subscriptions-transport-ws": "^0.9.16"
