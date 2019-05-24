@@ -5,11 +5,11 @@ import {
   NavigationScreenProps,
   NavigationScreenComponent,
 } from 'react-navigation';
-import colors from '../../styles/colors';
-import { getPrivateKey } from '../../auth/auth';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { fonts } from '../../styles';
+import { Paragraph, SmallParagraph, Title } from '../../components/styles/text';
+import { Spacing } from '../../components/Spacing';
 
 const PROFILE_QUERY = gql`
   query User($username: String) {
@@ -39,7 +39,17 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
       <Query<Response, Variables> query={PROFILE_QUERY}>
         {({ data, loading, error }) =>
           data && !loading && !error ? (
-            <Text>{data.user.username}</Text>
+            <>
+              <Title>Username</Title>
+              <Spacing height={10} />
+              <Paragraph>{data.user.username}</Paragraph>
+
+              <Spacing height={30} />
+
+              <Title>Public key</Title>
+              <Spacing height={10} />
+              <SmallParagraph>{data.user.publicKey}</SmallParagraph>
+            </>
           ) : (
             <Text>Loading...</Text>
           )

@@ -8,6 +8,7 @@ import ProfileScreen from '../screens/profile';
 import { fonts, colors } from '../styles';
 import { ProfileIcon } from '../components/icons/Profile';
 import { ChatIcon } from '../components/icons/Chat';
+import ConversationScreen from '../screens/conversation';
 
 interface IconProps {
   routeName: string;
@@ -32,13 +33,23 @@ const TabBarIcon: React.FC<IconProps> = ({ routeName, focused }) => (
   </>
 );
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Conversation: ConversationScreen,
+  },
+  {
+    initialRouteName: 'Home',
+    cardStyle: { backgroundColor: colors.OFF_WHITE },
+  },
+);
 
-const ProfileStack = createStackNavigator({
-  Profile: ProfileScreen,
-});
+const ProfileStack = createStackNavigator(
+  {
+    Profile: ProfileScreen,
+  },
+  { cardStyle: { backgroundColor: colors.OFF_WHITE } },
+);
 
 const SignedIn = createBottomTabNavigator(
   {
