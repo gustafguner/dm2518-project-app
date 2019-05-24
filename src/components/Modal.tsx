@@ -30,7 +30,7 @@ export const StyledModal: React.FC<ModalProps> = ({
     animationInTiming={600}
     animationOutTiming={300}
     backdropTransitionInTiming={300}
-    backdropTransitionOutTiming={300}
+    backdropTransitionOutTiming={0}
   >
     <ModalContainer>{children}</ModalContainer>
   </Modal>

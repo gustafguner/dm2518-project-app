@@ -1,11 +1,18 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
-import { View, Text, Button, TouchableHighlight } from 'react-native';
-import { Container } from '../../components/Container';
+import {
+  Alert,
+  View,
+  Text,
+  Button,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
 import {
   NavigationScreenProps,
   NavigationScreenComponent,
   ScrollView,
+  FlatList,
 } from 'react-navigation';
 
 import {
@@ -16,15 +23,27 @@ import {
 import { fonts, colors } from '../../styles';
 import styled from 'styled-components';
 import { CreateConversationModal } from './create-conversation';
+import { Paragraph } from '../../components/styles/text';
+import { Query } from 'react-apollo';
 
-const QUERY = gql`
-  query User {
-    user {
-      username
-      publicKey
+const CONVERSATIONS_QUERY = gql`
+  query Conversations {
+    conversations {
+      id
+      from
+      to
     }
   }
 `;
+
+interface Conversation {
+  to: string;
+  from: string;
+}
+
+interface Response {
+  conversations?: [Conversation];
+}
 
 const test = async () => {
   const keyPair = await generateKeyPair();
@@ -47,19 +66,39 @@ const test = async () => {
 const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => {
-  const [createModalVisible, setCreateModalVisible] = React.useState(true);
+  const [createModalVisible, setCreateModalVisible] = React.useState(false);
 
   test();
   return (
     <>
+      <Button
+        title="Create conversation"
+        onPress={() => {
+          setCreateModalVisible(true);
+        }}
+      />
       <ScrollView>
-        <Text>Home</Text>
-        <Button
-          title="Go to convo"
-          onPress={() => {
-            navigation.navigate('Conversation');
+        <Query<Response, {}> query={CONVERSATIONS_QUERY}>
+          {({ data, loading, error }) => {
+            console.log(data);
+            return data && data.conversations && !loading && !error ? (
+              <FlatList
+                data={data.conversations}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert.alert('Enter conversation');
+                    }}
+                  >
+                    <Paragraph>{item.to}</Paragraph>
+                  </TouchableOpacity>
+                )}
+              />
+            ) : (
+              <Paragraph>Loading...</Paragraph>
+            );
           }}
-        />
+        </Query>
       </ScrollView>
       <CreateConversationModal
         visible={createModalVisible}
