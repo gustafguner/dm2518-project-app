@@ -1,23 +1,9 @@
 import * as React from 'react';
-import gql from 'graphql-tag';
-import {
-  View,
-  Button,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps, FlatList } from 'react-navigation';
-
-import {
-  generateKeyPair,
-  encryptWithPublicKey,
-  decryptWithPrivateKey,
-} from '../../crypto';
 import { fonts, colors } from '../../styles';
 import styled from 'styled-components';
-import { CreateConversationModal } from './create-conversation-modal';
 import { Paragraph } from '../../components/styles/text';
-import { Query } from 'react-apollo';
 
 interface Conversation {
   id: string;
