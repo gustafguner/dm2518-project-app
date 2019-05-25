@@ -37,6 +37,7 @@ const CONVERSATIONS_QUERY = gql`
 `;
 
 interface Conversation {
+  id: string;
   to: string;
   from: string;
 }
@@ -82,12 +83,14 @@ const HomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
           {({ data, loading, error }) => {
             console.log(data);
             return data && data.conversations && !loading && !error ? (
-              <FlatList
+              <FlatList<Conversation>
                 data={data.conversations}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
-                      Alert.alert('Enter conversation');
+                      navigation.navigate('Conversation', {
+                        conversationId: item.id,
+                      });
                     }}
                   >
                     <Paragraph>{item.to}</Paragraph>

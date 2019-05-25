@@ -7,22 +7,52 @@ import {
   NavigationScreenComponent,
   ScrollView,
 } from 'react-navigation';
+import { Query } from 'react-apollo';
 
-import {
-  generateKeyPair,
-  encryptWithPublicKey,
-  decryptWithPrivateKey,
-} from '../../crypto';
-import { fonts } from '../../styles';
-import styled from 'styled-components';
+const CONVERSATION_QUERY = gql`
+  query Conversation($conversationId: ID!) {
+    conversation(conversationId: $conversationId) {
+      id
+      from
+      to
+    }
+  }
+`;
+
+interface Conversation {
+  id: string;
+  from: string;
+  to: string;
+}
+
+interface Response {
+  conversation?: Conversation;
+}
+
+interface Variables {
+  conversationId: string;
+}
 
 const ConversationScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => {
+  // @ts-ignore
+  const conversationId: string = navigation.getParam('conversationId', null);
   return (
-    <ScrollView>
-      <Text>Convo</Text>
-    </ScrollView>
+    <Query<Response, Variables>
+      query={CONVERSATION_QUERY}
+      variables={{ conversationId }}
+    >
+      {({ data, loading, error }) => {
+        console.log(data);
+
+        return data && !loading && !error ? (
+          <Text>Got it</Text>
+        ) : (
+          <Text>Loading...</Text>
+        );
+      }}
+    </Query>
   );
 };
 
