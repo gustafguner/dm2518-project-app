@@ -7,10 +7,17 @@ import {
 } from 'react-navigation';
 import colors from '../../styles/colors';
 import styled from 'styled-components';
+import { StandardButton } from '../../components/styles/buttons';
+import { Title } from '../../components/styles/text';
+import { Spacing } from '../../components/Spacing';
+
+const Header = styled(View)({
+  alignItems: 'center',
+});
 
 const Container = styled(View)({
   height: '100%',
-  alignItems: 'center',
+  padding: 16,
   justifyContent: 'center',
   flexFlow: 'column',
 });
@@ -19,14 +26,20 @@ const WelcomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => (
   <Container>
-    <Text>Welcome</Text>
-    <Button
+    <Header>
+      <Title>Welcome</Title>
+    </Header>
+
+    <Spacing height={20} />
+
+    <StandardButton
       title="Log in"
       onPress={() => {
         navigation.navigate('Login');
       }}
     />
-    <Button
+    <Spacing height={10} />
+    <StandardButton
       title="Sign up"
       onPress={() => {
         navigation.navigate('Signup');
@@ -37,6 +50,9 @@ const WelcomeScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
 WelcomeScreen.navigationOptions = {
   header: null,
+  cardStyle: {
+    background: 'red',
+  },
 };
 
 export default WelcomeScreen;
