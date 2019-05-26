@@ -14,6 +14,7 @@ import { Title, Paragraph } from '../../components/styles/text';
 import { StandardButton } from '../../components/styles/buttons';
 import { Spacing } from '../../components/Spacing';
 import { StandardTextInput } from '../../components/styles/input';
+import { Loader } from '../../components/Loader';
 
 const SIGN_UP_MUTATION = gql`
   mutation CreateUser($input: CreateUserInput!) {
@@ -55,8 +56,9 @@ const Form = styled(Formik)({
 const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => {
+  const [isSigningUp, setIsSigningUp]: any = React.useState(false);
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-  return (
+  return isSigningUp === false ? (
     <Container>
       <Header>
         <Title>Sign up</Title>
@@ -67,6 +69,7 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
             initialValues={{ username: '', password: '' }}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
+              setIsSigningUp(true);
               const keyPair = await generateKeyPair();
               if (!keyPair) {
                 return;
@@ -100,6 +103,7 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
               } else {
                 Alert.alert('Something went wrong...');
               }
+              setIsSigningUp(false);
 
               console.log(res);
             }}
@@ -147,6 +151,8 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
         )}
       </Mutation>
     </Container>
+  ) : (
+    <Loader />
   );
 };
 

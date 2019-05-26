@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, Text, Button, Clipboard } from 'react-native';
-import { Container } from '../../components/Container';
 import {
   NavigationScreenProps,
   NavigationScreenComponent,
@@ -13,6 +12,8 @@ import { Paragraph, SmallParagraph, Title } from '../../components/styles/text';
 import { Spacing } from '../../components/Spacing';
 import { signOut, getPrivateKey } from '../../auth/auth';
 import { StandardButton } from '../../components/styles/buttons';
+import { Loader } from '../../components/Loader';
+import styled from 'styled-components';
 
 const PROFILE_QUERY = gql`
   query User($username: String) {
@@ -22,6 +23,15 @@ const PROFILE_QUERY = gql`
     }
   }
 `;
+
+const Container = styled(View)({
+  flex: 1,
+});
+
+const Content = styled(ScrollView)({
+  flex: 1,
+  padding: 16,
+});
 
 interface User {
   username: string;
@@ -46,42 +56,45 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = ({
     >
       {({ data, loading, error }) =>
         data && !loading && !error ? (
-          <ScrollView style={{ padding: 16 }}>
-            <Title>Username</Title>
-            <Spacing height={10} />
-            <Paragraph>{data.user.username}</Paragraph>
+          <Container>
+            <Content showsVerticalScrollIndicator={false}>
+              <Title>Username</Title>
+              <Spacing height={10} />
+              <Paragraph>{data.user.username}</Paragraph>
 
-            <Spacing height={30} />
+              <Spacing height={30} />
 
-            <Title>Public key</Title>
-            <Spacing height={10} />
-            <SmallParagraph>{data.user.publicKey}</SmallParagraph>
+              <Title>Public key</Title>
+              <Spacing height={10} />
+              <SmallParagraph>{data.user.publicKey}</SmallParagraph>
 
-            <Spacing height={30} />
+              <Spacing height={30} />
 
-            <Title>Private key</Title>
-            <Spacing height={10} />
-            <StandardButton
-              title="Copy to clipboard"
-              onPress={async () => {
-                const privateKey = await getPrivateKey();
-                if (privateKey) {
-                  Clipboard.setString(privateKey);
-                }
-              }}
-            />
+              <Title>Private key</Title>
+              <Spacing height={10} />
+              <StandardButton
+                title="Copy to clipboard"
+                onPress={async () => {
+                  const privateKey = await getPrivateKey();
+                  if (privateKey) {
+                    Clipboard.setString(privateKey);
+                  }
+                }}
+              />
 
-            <Spacing height={50} />
-            <StandardButton
-              title="Log out"
-              onPress={async () => {
-                await signOut();
-                navigation.navigate('Welcome');
-              }}
-            />
-          </ScrollView>
+              <Spacing height={50} />
+              <StandardButton
+                title="Log out"
+                onPress={async () => {
+                  await signOut();
+                  navigation.navigate('Welcome');
+                }}
+              />
+              <Spacing height={30} />
+            </Content>
+          </Container>
         ) : (
-          <Text>Loading...</Text>
+          <Loader />
         )
       }
     </Query>

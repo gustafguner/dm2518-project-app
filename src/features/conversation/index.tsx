@@ -1,14 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import {
-  Button,
-  TouchableOpacity,
-  View,
-  TextInput,
-  NativeModules,
-  Platform,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, NativeModules, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Paragraph } from '../../components/styles/text';
 import { Mutation, Query } from 'react-apollo';
@@ -22,6 +14,7 @@ import to from 'await-to-js';
 var Aes = NativeModules.Aes;
 import { Root, useRootContext } from '../../Root';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { Loader } from '../../components/Loader';
 
 const CONVERSATION_QUERY = gql`
   query Conversation($conversationId: ID!) {
@@ -173,7 +166,7 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
                 }}
               />
             ) : (
-              <Paragraph>Loading...</Paragraph>
+              <Loader />
             );
           }}
         </Query>

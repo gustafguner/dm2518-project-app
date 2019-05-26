@@ -9,6 +9,7 @@ import ConversationsView from './conversations';
 import styled from 'styled-components';
 import { colors } from '../../styles';
 import { signOut } from '../../auth/auth';
+import { Loader } from '../../components/Loader';
 
 const CONVERSATIONS_QUERY = gql`
   query Conversations {
@@ -122,7 +123,7 @@ const Home: React.FC<NavigationScreenProps> = ({ navigation }) => {
               }}
             />
           ) : (
-            <Paragraph>Loading...</Paragraph>
+            <Loader />
           );
         }}
       </Query>

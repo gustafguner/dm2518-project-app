@@ -14,6 +14,7 @@ import { Spacing } from '../../components/Spacing';
 import { Title, Paragraph } from '../../components/styles/text';
 import { fonts } from '../../styles';
 import { Root } from '../../Root';
+import { Loader } from '../../components/Loader';
 
 const SIGN_IN_MUTATION = gql`
   mutation LogIn($input: LoginInput!) {
@@ -50,8 +51,9 @@ const Form = styled(Formik)({
 const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => {
+  const [isLoggingIn, setIsLoggingIn]: any = React.useState(false);
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-  return (
+  return isLoggingIn === false ? (
     <Container>
       <Header>
         <Title>Sign in</Title>
@@ -62,6 +64,7 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
             initialValues={{ username: '', password: '', privateKey: '' }}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
+              setIsLoggingIn(true);
 
               const res: any = await mutate({
                 variables: {
@@ -90,6 +93,8 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
               } else {
                 Alert.alert('Something went wrong...');
               }
+
+              setIsLoggingIn(false);
 
               console.log(res);
             }}
@@ -148,6 +153,8 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
         )}
       </Mutation>
     </Container>
+  ) : (
+    <Loader />
   );
 };
 
