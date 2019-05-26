@@ -58,70 +58,71 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 }) => {
   const [isSigningUp, setIsSigningUp]: any = React.useState(false);
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-  return isSigningUp === false ? (
-    <Container>
-      <Header>
-        <Title>Sign up</Title>
-      </Header>
-      <Mutation mutation={SIGN_UP_MUTATION}>
-        {(mutate: any) => (
-          <Form
-            initialValues={{ username: '', password: '' }}
-            onSubmit={async (values, { setSubmitting }) => {
-              setSubmitting(true);
-              setIsSigningUp(true);
-              const keyPair = await generateKeyPair();
-              if (!keyPair) {
-                return;
-              }
-              await setPrivateKey(keyPair.privateKey);
+  return (
+    <Mutation mutation={SIGN_UP_MUTATION}>
+      {(mutate: any) => (
+        <Form
+          initialValues={{ username: '', password: '' }}
+          onSubmit={async (values, { setSubmitting }) => {
+            setSubmitting(true);
+            setIsSigningUp(true);
+            const keyPair = await generateKeyPair();
+            if (!keyPair) {
+              return;
+            }
+            await setPrivateKey(keyPair.privateKey);
 
-              const res: any = await mutate({
-                variables: {
-                  input: {
-                    username: values.username,
-                    password: values.password,
-                    publicKey: keyPair.publicKey,
-                  },
+            const res: any = await mutate({
+              variables: {
+                input: {
+                  username: values.username,
+                  password: values.password,
+                  publicKey: keyPair.publicKey,
+                },
+              },
+            });
+
+            console.log('signup', res);
+
+            if (res.data.createUser !== null) {
+              await setToken(res.data.createUser.token);
+              await setUser(res.data.createUser.user);
+              setRootContext({
+                ...rootContext,
+                auth: {
+                  ...rootContext.auth,
+                  signedIn: true,
+                  user: res.data.createUser.user,
                 },
               });
-
-              console.log('signup', res);
-
-              if (res.data.createUser !== null) {
-                await setToken(res.data.createUser.token);
-                await setUser(res.data.createUser.user);
-                setRootContext({
-                  ...rootContext,
-                  auth: {
-                    ...rootContext.auth,
-                    signedIn: true,
-                    user: res.data.createUser.user,
-                  },
-                });
-                navigation.navigate('SignedIn');
-              } else {
-                Alert.alert('Something went wrong...');
-              }
+              navigation.navigate('SignedIn');
+            } else {
+              Alert.alert('Something went wrong...');
+              setSubmitting(false);
               setIsSigningUp(false);
+            }
 
-              console.log(res);
-            }}
-            render={({
-              values,
-              handleSubmit,
-              setFieldValue,
-              touched,
-              errors,
-              setFieldTouched,
-              isSubmitting,
-            }: FormikProps<FormValues>) => (
-              <View>
+            console.log(res);
+          }}
+          render={({
+            values,
+            handleSubmit,
+            setFieldValue,
+            touched,
+            errors,
+            setFieldTouched,
+            isSubmitting,
+          }: FormikProps<FormValues>) =>
+            isSigningUp === false ? (
+              <Container>
+                <Header>
+                  <Title>Sign up</Title>
+                </Header>
                 <Paragraph>Username</Paragraph>
                 <Spacing height={5} />
                 <StandardTextInput
                   placeholder="Username"
-                  keyboardType="email-address"
+                  keyboardType="default"
                   autoCapitalize="none"
                   value={values.email}
                   onChangeText={(value) => setFieldValue('username', value)}
@@ -145,14 +146,14 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
                 <Spacing height={25} />
                 <StandardButton title="Sign up" onPress={handleSubmit} />
-              </View>
-            )}
-          />
-        )}
-      </Mutation>
-    </Container>
-  ) : (
-    <Loader />
+              </Container>
+            ) : (
+              <Loader />
+            )
+          }
+        />
+      )}
+    </Mutation>
   );
 };
 

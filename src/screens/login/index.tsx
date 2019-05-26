@@ -53,61 +53,62 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 }) => {
   const [isLoggingIn, setIsLoggingIn]: any = React.useState(false);
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-  return isLoggingIn === false ? (
-    <Container>
-      <Header>
-        <Title>Sign in</Title>
-      </Header>
-      <Mutation mutation={SIGN_IN_MUTATION}>
-        {(mutate: any) => (
-          <Form
-            initialValues={{ username: '', password: '', privateKey: '' }}
-            onSubmit={async (values, { setSubmitting }) => {
-              setSubmitting(true);
-              setIsLoggingIn(true);
+  return (
+    <Mutation mutation={SIGN_IN_MUTATION}>
+      {(mutate: any) => (
+        <Form
+          initialValues={{ username: '', password: '', privateKey: '' }}
+          onSubmit={async (values, { setSubmitting }) => {
+            setSubmitting(true);
+            setIsLoggingIn(true);
 
-              const res: any = await mutate({
-                variables: {
-                  input: {
-                    username: values.username,
-                    password: values.password,
-                  },
+            const res: any = await mutate({
+              variables: {
+                input: {
+                  username: values.username,
+                  password: values.password,
+                },
+              },
+            });
+
+            console.log('sign in', res);
+
+            if (res.data.login !== null) {
+              await setToken(res.data.login.token);
+              await setUser(res.data.login.user);
+              await setPrivateKey(values.privateKey);
+              setRootContext({
+                ...rootContext,
+                auth: {
+                  ...rootContext.auth,
+                  signedIn: true,
+                  user: res.data.login.user,
                 },
               });
-
-              console.log('sign in', res);
-
-              if (res.data.login !== null) {
-                await setToken(res.data.login.token);
-                await setUser(res.data.login.user);
-                await setPrivateKey(values.privateKey);
-                setRootContext({
-                  ...rootContext,
-                  auth: {
-                    ...rootContext.auth,
-                    signedIn: true,
-                    user: res.data.login.user,
-                  },
-                });
-                navigation.navigate('SignedIn');
-              } else {
-                Alert.alert('Something went wrong...');
-              }
-
+              navigation.navigate('SignedIn');
+            } else {
+              Alert.alert('Incorrect credentials');
+              setSubmitting(false);
               setIsLoggingIn(false);
+            }
 
-              console.log(res);
-            }}
-            render={({
-              values,
-              handleSubmit,
-              setFieldValue,
-              touched,
-              errors,
-              setFieldTouched,
-              isSubmitting,
-            }: FormikProps<FormValues>) => (
-              <View>
+            console.log(res);
+          }}
+          render={({
+            values,
+            handleSubmit,
+            setFieldValue,
+            touched,
+            errors,
+            setFieldTouched,
+            isSubmitting,
+          }: FormikProps<FormValues>) =>
+            isLoggingIn === false ? (
+              <Container>
+                <Header>
+                  <Title>Sign in</Title>
+                </Header>
+
                 <Paragraph>Username</Paragraph>
                 <Spacing height={5} />
                 <StandardTextInput
@@ -125,6 +126,7 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
                 <Spacing height={5} />
                 <StandardTextInput
                   placeholder="Password"
+                  keyboardType="default"
                   secureTextEntry={true}
                   autoCapitalize="none"
                   value={values.password}
@@ -147,14 +149,14 @@ const LoginScreen: NavigationScreenComponent<NavigationScreenProps> = ({
                 />
                 <Spacing height={25} />
                 <StandardButton title="Sign in" onPress={handleSubmit} />
-              </View>
-            )}
-          />
-        )}
-      </Mutation>
-    </Container>
-  ) : (
-    <Loader />
+              </Container>
+            ) : (
+              <Loader />
+            )
+          }
+        />
+      )}
+    </Mutation>
   );
 };
 

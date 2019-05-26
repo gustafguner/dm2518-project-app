@@ -47,12 +47,12 @@ const ConversationsView: React.FC<NavigationScreenProps & Props> = ({
 
   return (
     <FlatList<Conversation>
+      inversed={true}
       data={conversations}
       style={{ padding: 16 }}
       initialNumToRender={conversations.length}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => {
-        console.log('Item', item);
         return (
           <ConversationItem>
             <TouchableOpacity

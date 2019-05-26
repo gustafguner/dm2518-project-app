@@ -108,7 +108,6 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
   const [symmetricKey, setSymmetricKey]: any = React.useState(null);
 
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-  console.log(rootContext);
 
   React.useEffect(() => {
     const getKey = async () => {

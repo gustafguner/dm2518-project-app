@@ -101,6 +101,7 @@ const Home: React.FC<NavigationScreenProps> = ({ navigation }) => {
         fetchPolicy={'network-only'}
       >
         {({ data, loading, error, subscribeToMore }) => {
+          console.log(data);
           return data && data.conversations && !loading && !error ? (
             <ConversationsView
               navigation={navigation}
