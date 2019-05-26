@@ -8,6 +8,8 @@ import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { getToken } from '../auth/auth';
 
+const backend = '54c0d02b.ngrok.io';
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     console.log(graphQLErrors);
@@ -15,11 +17,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: `http://${backend}/graphql`,
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/subscriptions`,
+  uri: `ws://${backend}/subscriptions`,
   options: {
     reconnect: true,
     timeout: 30000,

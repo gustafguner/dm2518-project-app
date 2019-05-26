@@ -131,6 +131,7 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
                 <Spacing height={5} />
                 <StandardTextInput
                   placeholder="Password"
+                  secureTextEntry={true}
                   autoCapitalize="none"
                   value={values.password}
                   onChangeText={(value) => setFieldValue('password', value)}
