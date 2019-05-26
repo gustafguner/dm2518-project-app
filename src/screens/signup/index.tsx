@@ -7,12 +7,13 @@ import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { generateKeyPair } from '../../crypto';
-import { setPrivateKey, setToken } from '../../auth/auth';
+import { setPrivateKey, setToken, setUser } from '../../auth/auth';
 
 const SIGN_UP_MUTATION = gql`
   mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
       user {
+        id
         username
         publicKey
       }
@@ -53,7 +54,7 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
       <Text>Please sign up</Text>
     </Header>
     <Mutation mutation={SIGN_UP_MUTATION}>
-      {(mutate) => (
+      {(mutate: any) => (
         <Form
           initialValues={{ username: '', password: '' }}
           onSubmit={async (values, { setSubmitting }) => {
@@ -74,8 +75,11 @@ const SignupScreen: NavigationScreenComponent<NavigationScreenProps> = ({
               },
             });
 
+            console.log('signup', res);
+
             if (res.data.createUser !== null) {
               await setToken(res.data.createUser.token);
+              await setUser(res.data.createUser.user);
               navigation.navigate('SignedIn');
             } else {
               Alert.alert('Something went wrong...');

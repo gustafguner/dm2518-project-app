@@ -8,16 +8,20 @@ import styled from 'styled-components';
 import { colors } from '../../styles';
 import ConversationView from './conversation';
 import ChatTextInput from './chat-text-input';
+import { getUser } from '../../auth/auth';
+import { encryptWithPublicKey } from '../../crypto';
 
 const CONVERSATION_QUERY = gql`
   query Conversation($conversationId: ID!) {
     conversation(conversationId: $conversationId) {
       id
       from {
+        id
         username
         publicKey
       }
       to {
+        id
         username
         publicKey
       }
@@ -58,6 +62,7 @@ interface Conversation {
 }
 
 interface User {
+  id: string;
   username: string;
   publicKey: string;
 }
@@ -136,10 +141,17 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
         {(mutate: any) => (
           <ChatTextInput
             sendMessage={async (body: string) => {
+              const me = await getUser();
+              const key =
+                me.id === conversation.from.id
+                  ? conversation.to.publicKey
+                  : conversation.from.publicKey;
+              const encryptedBody = await encryptWithPublicKey(body, key);
+
               const res: any = await mutate({
                 variables: {
                   input: {
-                    body,
+                    body: encryptedBody,
                     conversationId,
                   },
                 },

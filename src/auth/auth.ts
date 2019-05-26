@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import to from 'await-to-js';
 
 const TOKEN = 'token';
+const USER = 'user';
 const PRIVATE_KEY = 'privateKey';
 
 const setToken = async (token: string) => {
@@ -33,6 +34,21 @@ const isSignedIn = () => {
   });
 };
 
+const setUser = async (user: object) => {
+  const [err] = await to(AsyncStorage.setItem(USER, JSON.stringify(user)));
+  return !err;
+};
+
+const getUser = async () => {
+  const [, data] = await to(AsyncStorage.getItem(USER));
+  return data ? JSON.parse(data) : null;
+};
+
+const removeUser = async () => {
+  const [err] = await to(AsyncStorage.removeItem(USER));
+  return !err;
+};
+
 const setPrivateKey = async (privateKey: string) => {
   const [err] = await to(AsyncStorage.setItem(PRIVATE_KEY, privateKey));
   return !err;
@@ -58,6 +74,9 @@ export {
   getToken,
   removeToken,
   isSignedIn,
+  setUser,
+  getUser,
+  removeUser,
   setPrivateKey,
   getPrivateKey,
   removePrivateKey,

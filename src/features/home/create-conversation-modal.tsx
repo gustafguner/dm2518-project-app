@@ -10,11 +10,7 @@ import gql from 'graphql-tag';
 
 const CREATE_CONVERSATION_MUTATION = gql`
   mutation CreateConversation($username: String!) {
-    createConversation(username: $username) {
-      id
-      from
-      to
-    }
+    createConversation(username: $username)
   }
 `;
 
@@ -46,7 +42,7 @@ export const CreateConversationModal: React.FC<ModalProps> = ({
 
             console.log(res);
 
-            if (res.data.createConversation !== null) {
+            if (res.data.createConversation !== false) {
               onClose();
             }
           }}
