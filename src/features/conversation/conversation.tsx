@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { View, TouchableOpacity, NativeModules, Platform } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  NativeModules,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { NavigationScreenProps, FlatList } from 'react-navigation';
 import { fonts, colors } from '../../styles';
 import styled from 'styled-components';

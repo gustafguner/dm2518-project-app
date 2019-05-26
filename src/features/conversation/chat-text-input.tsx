@@ -65,7 +65,6 @@ const ChatTextInput: React.FC<Props> = ({ sendMessage }) => {
       >
         <UpArrowIcon width={30} height={30} fill={colors.WHITE} />
       </SendButton>
-      <KeyboardSpacer />
     </Container>
   );
 };
