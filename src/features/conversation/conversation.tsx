@@ -1,15 +1,20 @@
 import * as React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, NativeModules, Platform } from 'react-native';
 import { NavigationScreenProps, FlatList } from 'react-navigation';
 import { fonts, colors } from '../../styles';
 import styled from 'styled-components';
 import { Paragraph } from '../../components/styles/text';
+import to from 'await-to-js';
+var Aes = NativeModules.Aes;
 
 interface Conversation {
   id: string;
   to: User;
   from: User;
   messages: Message[];
+  fromKey: string;
+  toKey: string;
+  iv: string;
 }
 
 interface User {
@@ -37,22 +42,46 @@ const ConversationItem = styled(View)({
 
 interface Props {
   conversation: Conversation;
+  symmetricKey: any;
   subscribeToNewMessages: () => void;
 }
 
+const decryptBody = (encrypedBody: string, key: string, iv: string) =>
+  Aes.decrypt(encrypedBody, key, iv).then((text: string) => text);
+
 const ConversationView: React.FC<Props> = ({
   conversation,
+  symmetricKey,
   subscribeToNewMessages,
 }) => {
-  console.log(conversation);
+  const [decryptedMessages, setDecryptedMessages]: any = React.useState(
+    conversation.messages,
+  );
+
   React.useEffect(() => {
     subscribeToNewMessages();
   }, []);
 
+  React.useEffect(() => {
+    if (!symmetricKey) return;
+
+    const decrypted = conversation.messages.map(async (message: any) => {
+      if (message.decrypted === true) return message;
+      const [err, res] = await to(
+        decryptBody(message.body, symmetricKey, conversation.iv),
+      );
+      return { ...message, body: res, decrypted: true };
+    });
+
+    Promise.all(decrypted).then((messages: any) => {
+      setDecryptedMessages(messages);
+    });
+  }, [symmetricKey, conversation.messages]);
+
   return (
     <FlatList<Message>
       inverted={true}
-      data={conversation.messages}
+      data={decryptedMessages}
       style={{ padding: 16 }}
       showsVerticalScrollIndicator={false}
       initialNumToRender={conversation.messages.length}

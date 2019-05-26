@@ -1,5 +1,6 @@
 import { RSA } from 'react-native-rsa-native';
 import to from 'await-to-js';
+import { getPrivateKey } from '../auth/auth';
 
 export interface KeyPair {
   publicKey: string;
@@ -18,7 +19,6 @@ const generateKeyPair = async () => {
 
 const encryptWithPublicKey = async (payload: string, publicKey: any) => {
   const [err, data] = await to(RSA.encrypt(payload, publicKey));
-
   if (err || !data) {
     return false;
   }
@@ -26,7 +26,11 @@ const encryptWithPublicKey = async (payload: string, publicKey: any) => {
   return data;
 };
 
-const decryptWithPrivateKey = async (payload: any, privateKey: any) => {
+const decryptWithPrivateKey = async (payload: any) => {
+  const privateKey = await getPrivateKey();
+
+  if (!privateKey) return false;
+
   const [err, data] = await to(RSA.decrypt(payload, privateKey));
 
   if (err || !data) {

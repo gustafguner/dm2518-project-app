@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { NavigationScreenComponent } from 'react-navigation';
 import { NavigationScreenProps } from 'react-navigation';
-import { Formik, FormikProps, FormikActions } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';

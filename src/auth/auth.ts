@@ -54,9 +54,9 @@ const setPrivateKey = async (privateKey: string) => {
   return !err;
 };
 
-const getPrivateKey = async (privateKey: string) => {
+const getPrivateKey = async () => {
   const [, data] = await to(AsyncStorage.getItem(PRIVATE_KEY));
-  return !data;
+  return data;
 };
 
 const removePrivateKey = async () => {

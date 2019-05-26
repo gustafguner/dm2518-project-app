@@ -21,6 +21,9 @@ target 'app' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+
+  pod 'react-native-aes', :path => '../node_modules/react-native-aes-crypto'
+
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       if target.name == "React"

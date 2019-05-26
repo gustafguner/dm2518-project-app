@@ -1,6 +1,13 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
-import { Button, TouchableOpacity, View, TextInput } from 'react-native';
+import {
+  Button,
+  TouchableOpacity,
+  View,
+  TextInput,
+  NativeModules,
+  Platform,
+} from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Paragraph } from '../../components/styles/text';
 import { Mutation, Query } from 'react-apollo';
@@ -9,7 +16,9 @@ import { colors } from '../../styles';
 import ConversationView from './conversation';
 import ChatTextInput from './chat-text-input';
 import { getUser } from '../../auth/auth';
-import { encryptWithPublicKey } from '../../crypto';
+import { encryptWithPublicKey, decryptWithPrivateKey } from '../../crypto';
+import to from 'await-to-js';
+var Aes = NativeModules.Aes;
 
 const CONVERSATION_QUERY = gql`
   query Conversation($conversationId: ID!) {
@@ -32,6 +41,9 @@ const CONVERSATION_QUERY = gql`
         }
         timestamp
       }
+      fromKey
+      toKey
+      iv
     }
   }
 `;
@@ -81,6 +93,12 @@ interface Variables {
   conversationId: string;
 }
 
+const encryptBody = async (text: string, keyBase64: string, iv: string) =>
+  Aes.encrypt(text, keyBase64, iv).then((cipher: any) => cipher);
+
+const decryptBody = (encrypedBody: string, key: string, iv: string) =>
+  Aes.decrypt(encrypedBody, key, iv).then((text: string) => text);
+
 const ChatWrapper = styled(View)({
   flex: 1,
 });
@@ -89,6 +107,27 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
   // @ts-ignore
   const conversationId: string = navigation.getParam('conversationId', null);
   const [conversation, setConversation]: any = React.useState(null);
+  const [symmetricKey, setSymmetricKey]: any = React.useState(null);
+
+  React.useEffect(() => {
+    const getKey = async () => {
+      const me = await getUser();
+      const encryptedKey =
+        me.id === conversation.from.id
+          ? conversation.fromKey
+          : conversation.toKey;
+
+      const key = await decryptWithPrivateKey(encryptedKey);
+
+      if (!key) return;
+
+      setSymmetricKey(key);
+    };
+
+    if (conversation) {
+      getKey();
+    }
+  }, [conversation]);
 
   return (
     <>
@@ -98,11 +137,13 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
           variables={{ conversationId }}
         >
           {({ data, loading, error, subscribeToMore }) => {
-            console.log(data);
-            if (data) setConversation(data.conversation);
+            if (data && data.conversation) {
+              setConversation(data.conversation);
+            }
             return data && data.conversation && !loading && !error ? (
               <ConversationView
                 conversation={data.conversation}
+                symmetricKey={symmetricKey}
                 subscribeToNewMessages={() => {
                   subscribeToMore({
                     document: MESSAGE_SUBSCRIPTION,
@@ -112,13 +153,6 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
                       if (!subscriptionData.data) return prev;
 
                       const newMessage = subscriptionData.data.message;
-
-                      console.log({
-                        conversation: {
-                          ...prev.conversation,
-                          messages: [...prev.conversation.messages, newMessage],
-                        },
-                      });
 
                       return Object.assign({}, prev, {
                         conversation: {
@@ -141,12 +175,15 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
         {(mutate: any) => (
           <ChatTextInput
             sendMessage={async (body: string) => {
-              const me = await getUser();
-              const key =
-                me.id === conversation.from.id
-                  ? conversation.to.publicKey
-                  : conversation.from.publicKey;
-              const encryptedBody = await encryptWithPublicKey(body, key);
+              const [encryptErr, encryptedBody] = await to(
+                encryptBody(body, symmetricKey, conversation.iv),
+              );
+              const [decryptErr, decryptedBody] = await to(
+                decryptBody(encryptedBody, symmetricKey, conversation.iv),
+              );
+
+              console.log('Encrypted', encryptedBody);
+              console.log('Decrypted', decryptedBody);
 
               const res: any = await mutate({
                 variables: {

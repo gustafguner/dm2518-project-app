@@ -6068,6 +6068,15 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-aes-crypto@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-1.3.4.tgz#1246a7db5284c8244629c84f11c64ddb09d3e59a"
+  integrity sha512-J4J0ncn1fR6MzPUS3aQDHRFEBUdCMwYSgFXeKpqAU3dty6hkzGldBURcXBlF6Bw7Qb8Pd8RXIf1P56YLlZgr+A==
+
+"react-native-aes-crypto@https://github.com/gustafguner/react-native-aes":
+  version "1.3.4"
+  resolved "https://github.com/gustafguner/react-native-aes#f24584bfcbb4dac777280d8102846ce7c9a74f07"
+
 react-native-animatable@^1.3.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.2.tgz#4783ee1a73dc98815aef234ce6b819f80bfe7d80"
