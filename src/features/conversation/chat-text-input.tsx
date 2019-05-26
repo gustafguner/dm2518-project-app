@@ -5,6 +5,7 @@ import { colors, fonts } from '../../styles';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Paragraph } from '../../components/styles/text';
 import { UpArrowIcon } from '../../components/icons/UpArrow';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const Container = styled(View)({
   flexDirection: 'row',
@@ -64,6 +65,7 @@ const ChatTextInput: React.FC<Props> = ({ sendMessage }) => {
       >
         <UpArrowIcon width={30} height={30} fill={colors.WHITE} />
       </SendButton>
+      <KeyboardSpacer />
     </Container>
   );
 };

@@ -40,7 +40,10 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
 }) => {
   return (
-    <Query<Response, Variables> query={PROFILE_QUERY}>
+    <Query<Response, Variables>
+      query={PROFILE_QUERY}
+      fetchPolicy={'network-only'}
+    >
       {({ data, loading, error }) =>
         data && !loading && !error ? (
           <ScrollView style={{ padding: 16 }}>

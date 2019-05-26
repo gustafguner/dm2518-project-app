@@ -95,7 +95,10 @@ const Home: React.FC<NavigationScreenProps> = ({ navigation }) => {
         </StartConversationButton>
       </StartConversation>
 
-      <Query<Response, {}> query={CONVERSATIONS_QUERY}>
+      <Query<Response, {}>
+        query={CONVERSATIONS_QUERY}
+        fetchPolicy={'network-only'}
+      >
         {({ data, loading, error, subscribeToMore }) => {
           return data && data.conversations && !loading && !error ? (
             <ConversationsView

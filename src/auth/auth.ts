@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import to from 'await-to-js';
+import { RSA } from 'react-native-rsa-native';
 
 const TOKEN = 'token';
 const USER = 'user';

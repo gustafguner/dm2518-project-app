@@ -139,6 +139,7 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
       <ChatWrapper>
         <Query<Response, Variables>
           query={CONVERSATION_QUERY}
+          fetchPolicy={'network-only'}
           variables={{ conversationId }}
         >
           {({ data, loading, error, subscribeToMore }) => {
