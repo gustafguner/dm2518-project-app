@@ -4,6 +4,7 @@ import {
   NavigationScreenComponent,
 } from 'react-navigation';
 import Conversation from '../../features/conversation';
+import { fonts } from '../../styles';
 
 const ConversationScreen: NavigationScreenComponent<NavigationScreenProps> = ({
   navigation,
@@ -11,6 +12,10 @@ const ConversationScreen: NavigationScreenComponent<NavigationScreenProps> = ({
 
 ConversationScreen.navigationOptions = {
   title: 'Conversation',
+  headerTitleStyle: {
+    fontFamily: fonts.CIRCULAR_BOOK,
+    fontWeight: 'normal',
+  },
 };
 
 export default ConversationScreen;

@@ -13,8 +13,14 @@ const CONVERSATIONS_QUERY = gql`
   query Conversations {
     conversations {
       id
-      from
-      to
+      from {
+        username
+        publicKey
+      }
+      to {
+        username
+        publicKey
+      }
     }
   }
 `;
@@ -23,8 +29,14 @@ const CONVERSATION_SUBSCRIPTION = gql`
   subscription Converation {
     conversation {
       id
-      from
-      to
+      from {
+        username
+        publicKey
+      }
+      to {
+        username
+        publicKey
+      }
     }
   }
 `;

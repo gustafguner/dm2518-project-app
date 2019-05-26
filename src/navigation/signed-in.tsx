@@ -44,6 +44,20 @@ const HomeStack = createStackNavigator(
   },
 );
 
+HomeStack.navigationOptions = ({ navigation }: any) => {
+  let tabBarVisible = true;
+  if (
+    navigation.state.index > 0 &&
+    navigation.state.routes[1].routeName === 'Conversation'
+  ) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+  };
+};
+
 const ProfileStack = createStackNavigator(
   {
     Profile: ProfileScreen,

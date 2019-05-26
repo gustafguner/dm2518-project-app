@@ -7,14 +7,19 @@ import { Paragraph } from '../../components/styles/text';
 
 interface Conversation {
   id: string;
-  to: string;
-  from: string;
+  to: User;
+  from: User;
   messages: Message[];
+}
+
+interface User {
+  username: string;
+  publicKey: string;
 }
 
 interface Message {
   body: string;
-  author: string;
+  author: User;
   timestamp: string;
 }
 
@@ -22,12 +27,12 @@ const ConversationItem = styled(View)({
   justifyContent: 'center',
   background: colors.WHITE,
   alignSelf: 'flex-end',
-  borderRadius: 20,
-  padding: 16,
-  marginBottom: 16,
-  shadowColor: colors.BLACK,
-  shadowOpacity: 0.08,
-  shadowRadius: 10,
+  borderRadius: 50,
+  paddingTop: 12,
+  paddingBottom: 12,
+  paddingLeft: 16,
+  paddingRight: 16,
+  marginBottom: 9,
 });
 
 interface Props {
@@ -46,8 +51,10 @@ const ConversationView: React.FC<Props> = ({
 
   return (
     <FlatList<Message>
+      inverted={true}
       data={conversation.messages}
       style={{ padding: 16 }}
+      showsVerticalScrollIndicator={false}
       initialNumToRender={conversation.messages.length}
       keyExtractor={(item) => item.timestamp}
       renderItem={({ item }) => {

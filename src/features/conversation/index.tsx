@@ -13,8 +13,14 @@ const CONVERSATION_QUERY = gql`
   query Conversation($conversationId: ID!) {
     conversation(conversationId: $conversationId) {
       id
-      from
-      to
+      from {
+        username
+        publicKey
+      }
+      to {
+        username
+        publicKey
+      }
       messages {
         body
         author {
@@ -46,14 +52,19 @@ const SEND_MESSAGE_MUTATION = gql`
 
 interface Conversation {
   id: string;
-  from: string;
-  to: string;
+  from: User;
+  to: User;
   messages: Message[];
+}
+
+interface User {
+  username: string;
+  publicKey: string;
 }
 
 interface Message {
   body: string;
-  author: string;
+  author: User;
   timestamp: string;
 }
 
@@ -72,6 +83,8 @@ const ChatWrapper = styled(View)({
 const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
   // @ts-ignore
   const conversationId: string = navigation.getParam('conversationId', null);
+  const [conversation, setConversation]: any = React.useState(null);
+
   return (
     <>
       <ChatWrapper>
@@ -80,6 +93,8 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
           variables={{ conversationId }}
         >
           {({ data, loading, error, subscribeToMore }) => {
+            console.log(data);
+            if (data) setConversation(data.conversation);
             return data && data.conversation && !loading && !error ? (
               <ConversationView
                 conversation={data.conversation}
@@ -103,7 +118,7 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
                       return Object.assign({}, prev, {
                         conversation: {
                           ...prev.conversation,
-                          messages: [...prev.conversation.messages, newMessage],
+                          messages: [newMessage, ...prev.conversation.messages],
                         },
                       });
                     },

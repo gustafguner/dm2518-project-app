@@ -48,6 +48,11 @@ const removePrivateKey = async () => {
   return !err;
 };
 
+const signOut = async () => {
+  await removeToken();
+  await removePrivateKey();
+};
+
 export {
   setToken,
   getToken,
@@ -56,4 +61,5 @@ export {
   setPrivateKey,
   getPrivateKey,
   removePrivateKey,
+  signOut,
 };

@@ -7,8 +7,13 @@ import { Paragraph } from '../../components/styles/text';
 
 interface Conversation {
   id: string;
-  to: string;
-  from: string;
+  from: User;
+  to: User;
+}
+
+interface User {
+  username: string;
+  publicKey: string;
 }
 
 const ConversationItem = styled(View)({
@@ -55,7 +60,7 @@ const ConversationsView: React.FC<NavigationScreenProps & Props> = ({
                 });
               }}
             >
-              <Paragraph>{item.to}</Paragraph>
+              <Paragraph>{item.to.username}</Paragraph>
             </TouchableOpacity>
           </ConversationItem>
         );

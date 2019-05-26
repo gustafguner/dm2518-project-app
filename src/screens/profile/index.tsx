@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { Container } from '../../components/Container';
 import {
   NavigationScreenProps,
   NavigationScreenComponent,
+  ScrollView,
 } from 'react-navigation';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { fonts } from '../../styles';
 import { Paragraph, SmallParagraph, Title } from '../../components/styles/text';
 import { Spacing } from '../../components/Spacing';
+import { signOut } from '../../auth/auth';
 
 const PROFILE_QUERY = gql`
   query User($username: String) {
@@ -33,29 +35,38 @@ interface Variables {
   username?: string;
 }
 
-const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = () => {
+const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = ({
+  navigation,
+}) => {
   return (
-    <Container>
-      <Query<Response, Variables> query={PROFILE_QUERY}>
-        {({ data, loading, error }) =>
-          data && !loading && !error ? (
-            <>
-              <Title>Username</Title>
-              <Spacing height={10} />
-              <Paragraph>{data.user.username}</Paragraph>
+    <Query<Response, Variables> query={PROFILE_QUERY}>
+      {({ data, loading, error }) =>
+        data && !loading && !error ? (
+          <ScrollView style={{ padding: 16 }}>
+            <Title>Username</Title>
+            <Spacing height={10} />
+            <Paragraph>{data.user.username}</Paragraph>
 
-              <Spacing height={30} />
+            <Spacing height={30} />
 
-              <Title>Public key</Title>
-              <Spacing height={10} />
-              <SmallParagraph>{data.user.publicKey}</SmallParagraph>
-            </>
-          ) : (
-            <Text>Loading...</Text>
-          )
-        }
-      </Query>
-    </Container>
+            <Title>Public key</Title>
+            <Spacing height={10} />
+            <SmallParagraph>{data.user.publicKey}</SmallParagraph>
+
+            <Spacing height={20} />
+            <Button
+              title="Log out"
+              onPress={async () => {
+                await signOut();
+                navigation.navigate('Welcome');
+              }}
+            />
+          </ScrollView>
+        ) : (
+          <Text>Loading...</Text>
+        )
+      }
+    </Query>
   );
 };
 
