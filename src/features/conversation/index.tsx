@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import {
   Button,
@@ -19,6 +19,7 @@ import { getUser } from '../../auth/auth';
 import { encryptWithPublicKey, decryptWithPrivateKey } from '../../crypto';
 import to from 'await-to-js';
 var Aes = NativeModules.Aes;
+import { Root, useRootContext } from '../../Root';
 
 const CONVERSATION_QUERY = gql`
   query Conversation($conversationId: ID!) {
@@ -37,6 +38,7 @@ const CONVERSATION_QUERY = gql`
       messages {
         body
         author {
+          id
           username
         }
         timestamp
@@ -53,6 +55,7 @@ const MESSAGE_SUBSCRIPTION = gql`
     message(conversationId: $conversationId) {
       body
       author {
+        id
         username
       }
       timestamp
@@ -109,11 +112,13 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
   const [conversation, setConversation]: any = React.useState(null);
   const [symmetricKey, setSymmetricKey]: any = React.useState(null);
 
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
+  console.log(rootContext);
+
   React.useEffect(() => {
     const getKey = async () => {
-      const me = await getUser();
       const encryptedKey =
-        me.id === conversation.from.id
+        rootContext.auth.user.id === conversation.from.id
           ? conversation.fromKey
           : conversation.toKey;
 
@@ -124,7 +129,7 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
       setSymmetricKey(key);
     };
 
-    if (conversation) {
+    if (conversation && symmetricKey === null) {
       getKey();
     }
   }, [conversation]);

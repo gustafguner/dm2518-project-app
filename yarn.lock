@@ -2030,6 +2030,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
+constate@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/constate/-/constate-1.1.1.tgz#444f27fb8178ce8a0f5483c06b5153927eed5409"
+  integrity sha512-5NSP5HuZoIcRjpWdLgKLk3kXkJWoD6qV9Dv6XsZz9Dk17E4jDEdi6pTtStv5TDC06+4fXW3Qq4VVUD0pWaaccA==
+
 convert-source-map@^1.1.0, convert-source-map@^1.4.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.6.0.tgz#51b537a8c43e0f04dec1993bffcdd504e758ac20"
@@ -6067,11 +6072,6 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-native-aes-crypto@^1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-1.3.4.tgz#1246a7db5284c8244629c84f11c64ddb09d3e59a"
-  integrity sha512-J4J0ncn1fR6MzPUS3aQDHRFEBUdCMwYSgFXeKpqAU3dty6hkzGldBURcXBlF6Bw7Qb8Pd8RXIf1P56YLlZgr+A==
 
 "react-native-aes-crypto@https://github.com/gustafguner/react-native-aes":
   version "1.3.4"

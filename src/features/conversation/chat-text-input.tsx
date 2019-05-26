@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { colors, fonts } from '../../styles';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Paragraph } from '../../components/styles/text';
+import { UpArrowIcon } from '../../components/icons/UpArrow';
 
 const Container = styled(View)({
   flexDirection: 'row',
@@ -33,6 +34,8 @@ const SendButton = styled(TouchableOpacity)({
   marginLeft: 16,
   background: colors.PRIMARY,
   borderRadius: 50,
+  justifyContent: 'center',
+  alignItems: 'center',
 });
 
 interface Props {
@@ -59,7 +62,7 @@ const ChatTextInput: React.FC<Props> = ({ sendMessage }) => {
           setFieldText('');
         }}
       >
-        <Paragraph>+</Paragraph>
+        <UpArrowIcon width={30} height={30} fill={colors.WHITE} />
       </SendButton>
     </Container>
   );

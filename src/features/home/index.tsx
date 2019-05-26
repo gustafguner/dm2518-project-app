@@ -14,10 +14,12 @@ const CONVERSATIONS_QUERY = gql`
     conversations {
       id
       from {
+        id
         username
         publicKey
       }
       to {
+        id
         username
         publicKey
       }
@@ -61,8 +63,14 @@ const StartConversationText = styled(Paragraph)({
 
 interface Conversation {
   id: string;
-  to: string;
-  from: string;
+  to: User;
+  from: User;
+}
+
+interface User {
+  id: string;
+  username: string;
+  publicKey: string;
 }
 
 interface Response {
@@ -81,7 +89,7 @@ const Home: React.FC<NavigationScreenProps> = ({ navigation }) => {
             setCreateModalVisible(true);
           }}
         >
-          <StartConversationText>Start a conversation 🤘</StartConversationText>
+          <StartConversationText>Start a conversation 🕵</StartConversationText>
         </StartConversationButton>
       </StartConversation>
 

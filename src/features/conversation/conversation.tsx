@@ -5,6 +5,8 @@ import { fonts, colors } from '../../styles';
 import styled from 'styled-components';
 import { Paragraph } from '../../components/styles/text';
 import to from 'await-to-js';
+import { Root } from '../../Root';
+
 var Aes = NativeModules.Aes;
 
 interface Conversation {
@@ -18,6 +20,7 @@ interface Conversation {
 }
 
 interface User {
+  id: string;
   username: string;
   publicKey: string;
 }
@@ -28,17 +31,27 @@ interface Message {
   timestamp: string;
 }
 
-const ConversationItem = styled(View)({
+interface ConversationItemProps {
+  fromMe: boolean;
+}
+
+const ConversationItem = styled(View)(({ fromMe }: ConversationItemProps) => ({
   justifyContent: 'center',
-  background: colors.WHITE,
-  alignSelf: 'flex-end',
+  background: fromMe ? colors.PRIMARY : colors.WHITE,
+  alignSelf: fromMe ? 'flex-end' : 'flex-start',
   borderRadius: 50,
   paddingTop: 12,
   paddingBottom: 12,
   paddingLeft: 16,
   paddingRight: 16,
   marginBottom: 9,
-});
+}));
+
+const ChatMessageText = styled(Paragraph)(
+  ({ fromMe }: ConversationItemProps) => ({
+    color: fromMe ? colors.WHITE : colors.OFF_BLACK,
+  }),
+);
 
 interface Props {
   conversation: Conversation;
@@ -57,6 +70,7 @@ const ConversationView: React.FC<Props> = ({
   const [decryptedMessages, setDecryptedMessages]: any = React.useState(
     conversation.messages,
   );
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
 
   React.useEffect(() => {
     subscribeToNewMessages();
@@ -88,8 +102,14 @@ const ConversationView: React.FC<Props> = ({
       keyExtractor={(item) => item.timestamp}
       renderItem={({ item }) => {
         return (
-          <ConversationItem>
-            <Paragraph>{item.body}</Paragraph>
+          <ConversationItem
+            fromMe={rootContext.auth.user.id === item.author.id}
+          >
+            <ChatMessageText
+              fromMe={rootContext.auth.user.id === item.author.id}
+            >
+              {item.body}
+            </ChatMessageText>
           </ConversationItem>
         );
       }}

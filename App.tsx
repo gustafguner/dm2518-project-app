@@ -4,6 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import { createRootNavigator } from './src/navigation';
 import * as auth from './src/auth/auth';
+import { Root } from './src/Root';
 
 const App = () => {
   const [signedIn, setSignedIn] = React.useState(false);
@@ -18,7 +19,9 @@ const App = () => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Navigator />
+      <Root.Provider>
+        <Navigator />
+      </Root.Provider>
     </ApolloProvider>
   );
 };

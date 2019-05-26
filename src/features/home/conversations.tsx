@@ -4,6 +4,7 @@ import { NavigationScreenProps, FlatList } from 'react-navigation';
 import { fonts, colors } from '../../styles';
 import styled from 'styled-components';
 import { Paragraph } from '../../components/styles/text';
+import { Root } from '../../Root';
 
 interface Conversation {
   id: string;
@@ -12,6 +13,7 @@ interface Conversation {
 }
 
 interface User {
+  id: string;
   username: string;
   publicKey: string;
 }
@@ -38,7 +40,8 @@ const ConversationsView: React.FC<NavigationScreenProps & Props> = ({
   navigation,
   subscribeToNewConversations,
 }) => {
-  console.log(conversations);
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
+
   React.useEffect(() => {
     subscribeToNewConversations();
   }, []);
@@ -60,7 +63,11 @@ const ConversationsView: React.FC<NavigationScreenProps & Props> = ({
                 });
               }}
             >
-              <Paragraph>{item.to.username}</Paragraph>
+              <Paragraph>
+                {rootContext.auth.user.id === item.from.id
+                  ? item.to.username
+                  : item.from.username}
+              </Paragraph>
             </TouchableOpacity>
           </ConversationItem>
         );
