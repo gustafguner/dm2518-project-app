@@ -22,3 +22,9 @@ export const Title = styled(Text)({
   fontSize: 20,
   fontWeight: 'bold',
 });
+
+export const ModalTitle = styled(Text)({
+  ...baseStyles,
+  fontSize: 24,
+  fontWeight: 'bold',
+});

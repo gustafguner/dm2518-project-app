@@ -41,7 +41,6 @@ const ConversationsView: React.FC<NavigationScreenProps & Props> = ({
   subscribeToNewConversations,
 }) => {
   const { rootContext, setRootContext }: any = React.useContext(Root.Context);
-
   React.useEffect(() => {
     subscribeToNewConversations();
   }, []);

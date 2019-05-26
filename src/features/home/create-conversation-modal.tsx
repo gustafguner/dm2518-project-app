@@ -1,6 +1,7 @@
 import React, { isValidElement } from 'react';
 import { StyledModal, ModalProps } from '../../components/Modal';
-import { Paragraph } from '../../components/styles/text';
+import { Paragraph, Title, ModalTitle } from '../../components/styles/text';
+import { StandardTextInput } from '../../components/styles/input';
 import { Spacing } from '../../components/Spacing';
 import { Formik, FormikProps } from 'formik';
 import { View, Button, Alert, NativeModules, Platform } from 'react-native';
@@ -10,6 +11,7 @@ import gql from 'graphql-tag';
 import to from 'await-to-js';
 import { encryptWithPublicKey } from '../../crypto';
 import { signOut } from '../../auth/auth';
+import { StandardButton } from '../../components/styles/buttons';
 var Aes = NativeModules.Aes;
 
 const CREATE_CONVERSATION_MUTATION = gql`
@@ -17,9 +19,13 @@ const CREATE_CONVERSATION_MUTATION = gql`
     createConversation(username: $username) {
       id
       from {
+        id
+        username
         publicKey
       }
       to {
+        id
+        username
         publicKey
       }
     }
@@ -42,8 +48,8 @@ export const CreateConversationModal: React.FC<ModalProps> = ({
 }) => {
   return (
     <StyledModal visible={visible} onClose={onClose}>
-      <Paragraph>Create conversation</Paragraph>
-      <Spacing height={10} />
+      <ModalTitle>Create conversation</ModalTitle>
+      <Spacing height={20} />
 
       <Mutation mutation={CREATE_CONVERSATION_MUTATION}>
         {(mutate: any) => (
@@ -116,9 +122,8 @@ export const CreateConversationModal: React.FC<ModalProps> = ({
                   isSubmitting,
                 }: FormikProps<FormValues>) => (
                   <View>
-                    <Paragraph>Username</Paragraph>
-                    <TextInput
-                      style={{ borderWidth: 1 }}
+                    <StandardTextInput
+                      placeholder="Username"
                       keyboardType="default"
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -127,7 +132,8 @@ export const CreateConversationModal: React.FC<ModalProps> = ({
                       onBlur={() => setFieldTouched('username')}
                       editable={!isSubmitting}
                     />
-                    <Button title="Send" onPress={handleSubmit} />
+                    <Spacing height={15} />
+                    <StandardButton title="Send" onPress={handleSubmit} />
                   </View>
                 )}
               />

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Clipboard } from 'react-native';
 import { Container } from '../../components/Container';
 import {
   NavigationScreenProps,
@@ -11,7 +11,8 @@ import gql from 'graphql-tag';
 import { fonts } from '../../styles';
 import { Paragraph, SmallParagraph, Title } from '../../components/styles/text';
 import { Spacing } from '../../components/Spacing';
-import { signOut } from '../../auth/auth';
+import { signOut, getPrivateKey } from '../../auth/auth';
+import { StandardButton } from '../../components/styles/buttons';
 
 const PROFILE_QUERY = gql`
   query User($username: String) {
@@ -53,8 +54,22 @@ const ProfileScreen: NavigationScreenComponent<NavigationScreenProps> = ({
             <Spacing height={10} />
             <SmallParagraph>{data.user.publicKey}</SmallParagraph>
 
-            <Spacing height={20} />
-            <Button
+            <Spacing height={30} />
+
+            <Title>Private key</Title>
+            <Spacing height={10} />
+            <StandardButton
+              title="Copy to clipboard"
+              onPress={async () => {
+                const privateKey = await getPrivateKey();
+                if (privateKey) {
+                  Clipboard.setString(privateKey);
+                }
+              }}
+            />
+
+            <Spacing height={50} />
+            <StandardButton
               title="Log out"
               onPress={async () => {
                 await signOut();

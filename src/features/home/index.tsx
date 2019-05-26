@@ -8,6 +8,7 @@ import { Query } from 'react-apollo';
 import ConversationsView from './conversations';
 import styled from 'styled-components';
 import { colors } from '../../styles';
+import { signOut } from '../../auth/auth';
 
 const CONVERSATIONS_QUERY = gql`
   query Conversations {
@@ -32,10 +33,12 @@ const CONVERSATION_SUBSCRIPTION = gql`
     conversation {
       id
       from {
+        id
         username
         publicKey
       }
       to {
+        id
         username
         publicKey
       }
@@ -80,7 +83,6 @@ interface Response {
 
 const Home: React.FC<NavigationScreenProps> = ({ navigation }) => {
   const [createModalVisible, setCreateModalVisible] = React.useState(false);
-
   return (
     <>
       <StartConversation>

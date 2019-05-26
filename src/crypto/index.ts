@@ -2,6 +2,8 @@ import { RSA } from 'react-native-rsa-native';
 import to from 'await-to-js';
 import { getPrivateKey } from '../auth/auth';
 
+const keyTag = 'com.chat.app';
+
 export interface KeyPair {
   publicKey: string;
   privateKey: string;
