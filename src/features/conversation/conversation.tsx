@@ -100,7 +100,6 @@ const ConversationView: React.FC<Props> = ({
 
   return (
     <FlatList<Message>
-      inverted={true}
       data={decryptedMessages}
       style={{ padding: 16 }}
       showsVerticalScrollIndicator={false}

@@ -157,7 +157,7 @@ const Conversation: React.FC<NavigationScreenProps> = ({ navigation }) => {
                       return Object.assign({}, prev, {
                         conversation: {
                           ...prev.conversation,
-                          messages: [newMessage, ...prev.conversation.messages],
+                          messages: [...prev.conversation.messages, newMessage],
                         },
                       });
                     },
