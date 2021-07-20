@@ -25,7 +25,7 @@
     "graphql-tag": "^2.10.1",
     "react": "16.8.3",
     "react-apollo": "^2.5.5",
-    "react-native": "0.59.8",
+    "react-native": "0.62.3",
     "react-native-aes-crypto": "https://github.com/gustafguner/react-native-aes",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-keyboard-spacer": "^0.4.1",
